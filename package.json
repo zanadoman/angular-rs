@@ -1,0 +1,50 @@
+{
+  "name": "angular-rs",
+  "version": "0.1.0",
+  "scripts": {
+    "format": "cargo fmt && prettier . -w",
+    "watch": "watchexec -r -f 'api/**/*.rs' -f 'templates/**/*.html' -f '**/*.toml' \"concurrently -k 'cargo run' 'wait-on -c wait-on.config.js && ng-openapi -c openapi.config.ts && ng build -c development --watch'\"",
+    "test": "cargo fmt --check && cargo clippy && cargo test && prettier . -c && concurrently -s first -k \"cargo run\" \"wait-on -c wait-on.config.js && ng-openapi -c openapi.config.ts\" && ng lint && ng test --no-watch --no-progress",
+    "build": "concurrently -s first -k \"cargo run\" \"wait-on -c wait-on.config.js && ng-openapi -c openapi.config.ts\" && ng build",
+    "serve": "cargo run -r"
+  },
+  "private": true,
+  "packageManager": "npm@11.13.0",
+  "dependencies": {
+    "@angular/cdk": "^21.2.10",
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "@capacitor/angular": "^2.0.3",
+    "@capacitor/core": "latest",
+    "@ng-bootstrap/ng-bootstrap": "^20.0.0",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.10",
+    "@angular/cli": "^21.2.10",
+    "@angular/compiler-cli": "^21.2.0",
+    "@angular/localize": "^21.2.0",
+    "@capacitor/cli": "latest",
+    "@dotenvx/dotenvx": "^1.65.0",
+    "@eslint/config-helpers": "^0.6.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "21.3.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.0.3",
+    "jsdom": "^28.0.0",
+    "ng-openapi": "^0.2.18",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.56.1",
+    "vitest": "^4.0.8",
+    "wait-on": "^9.0.6"
+  }
+}

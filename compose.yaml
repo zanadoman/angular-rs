@@ -1,0 +1,57 @@
+name: angular-rs
+
+services:
+  db:
+    image: postgres:18.3-trixie
+    volumes:
+      - db:/var/lib/postgresql
+    ports:
+      - ${DATABASE_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  smtp:
+    image: axllent/mailpit:v1.29.7
+    volumes:
+      - smtp:/data
+    ports:
+      - ${SMTP_PORT}:1025
+      - ${MAILPIT_PORT}:8025
+    environment:
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_TLS_CERT: sans:localhost
+      MP_SMTP_TLS_KEY: sans:localhost
+      MP_SMTP_REQUIRE_TLS: 1
+      MP_SMTP_AUTH: ${SMTP_USERNAME}:${SMTP_PASSWORD}
+      MP_UI_AUTH: ${SMTP_USERNAME}:${SMTP_PASSWORD}
+
+  app:
+    build: .
+    volumes:
+      - rustup:/usr/local/rustup
+      - cargo:/usr/local/cargo/registry
+      - /dev/null:/app/.cargo/config.toml
+      - target:/app/target
+      - .:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    working_dir: /app
+
+  pgadmin:
+    image: dpage/pgadmin4:9.15.0
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - ${PGADMIN_PORT}:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${DATABASE_USERNAME}@angular-rs.org
+      PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD}
+
+volumes:
+  db:
+  smtp:
+  rustup:
+  cargo:
+  target:
+  pgadmin:
