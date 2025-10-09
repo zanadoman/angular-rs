@@ -1,0 +1,5 @@
+CREATE TABLE `user` (
+    `id`       INTEGER AUTO_INCREMENT PRIMARY KEY,
+    `name`     VARCHAR(50) NOT NULL UNIQUE,
+    `password` VARCHAR(97) NOT NULL
+);

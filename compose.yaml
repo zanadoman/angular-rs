@@ -1,0 +1,32 @@
+name: angular-rs
+
+services:
+  db:
+    env_file: .env
+    image: mariadb:12.0.2
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_TCP_PORT: ${DATABASE_PORT}
+
+  app:
+    env_file: .env
+    build: .
+    volumes:
+      - rustup:/usr/local/rustup
+      - cargo:/usr/local/cargo/registry
+      - target:/app/target
+      - ./:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    environment:
+      CHROME_BIN: /bin/chromium
+
+volumes:
+  db:
+  rustup:
+  cargo:
+  target:
