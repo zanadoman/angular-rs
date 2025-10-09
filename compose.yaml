@@ -1,0 +1,31 @@
+name: angular-rs
+
+services:
+  db:
+    env_file: .env
+    image: postgres:18.1-trixie
+    volumes:
+      - db:/var/lib/postgresql
+    ports:
+      - ${DATABASE_PORT}:5432
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  app:
+    env_file: .env
+    build: .
+    volumes:
+      - rustup:/usr/local/rustup
+      - cargo:/usr/local/cargo/registry
+      - target:/app/target
+      - ./:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    environment:
+      CHROME_BIN: /bin/chromium
+
+volumes:
+  db:
+  rustup:
+  cargo:
+  target:
