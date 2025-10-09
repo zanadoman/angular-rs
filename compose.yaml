@@ -1,0 +1,26 @@
+name: angular-rs
+
+services:
+  db:
+    image: mariadb:12.0.2
+    volumes:
+      - db-data:/var/lib/mysql
+    network_mode: host
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+
+  app:
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - cargo-registry:/usr/local/cargo/registry
+      - ./:/app
+    network_mode: host
+    environment:
+      CHROME_BIN: /bin/chromium
+
+volumes:
+  db-data:
+  cargo-registry:
