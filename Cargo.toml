@@ -1,0 +1,47 @@
+[package]
+name = "angular-rs"
+version = "0.1.0"
+edition = "2024"
+default-run = "api"
+
+[lib]
+path = "api/lib.rs"
+
+[[bin]]
+name = "api"
+path = "api/api.rs"
+
+[[bin]]
+name = "argon2"
+path = "api/argon2.rs"
+
+[dependencies]
+axum = { version = "0.8.7", default-features = false, features = ["form", "http2", "macros", "multipart", "query", "ws"] }
+axum-login = { version = "0.18.0", default-features = false }
+dialoguer = { version = "0.12.0", default-features = false, features = ["password"] }
+dotenvy = { version = "0.15.7", default-features = false }
+notify = { version = "8.2.0", default-features = false }
+password-auth = { version = "1.0.0", default-features = false, features = ["argon2"] }
+reqwest = { version = "0.12.24", default-features = false, features = ["cookies", "json", "multipart", "rustls-tls", "stream"] }
+serde = { version = "1.0.228", default-features = false }
+serde_json = { version = "1.0.145", default-features = false }
+sqlx = { version = "0.8.6", default-features = false, features = ["runtime-tokio-rustls", "uuid"] }
+time = { version = "0.3.44", default-features = false }
+tokio = { version = "1.48.0", default-features = false, features = ["rt-multi-thread", "signal"] }
+tower-http = { version = "0.6.7", default-features = false, features = ["catch-panic", "fs", "timeout", "trace"] }
+tower-livereload = { version = "0.10.1", default-features = false }
+tower-sessions-sqlx-store = { version = "0.15.0", default-features = false, features = ["postgres"] }
+tracing = { version = "0.1.43", default-features = false }
+tracing-appender = { version = "0.2.4", default-features = false }
+tracing-subscriber = { version = "0.3.22", default-features = false, features = ["ansi", "env-filter"] }
+utoipa = { version = "5.4.0", default-features = false, features = ["preserve_order", "time", "uuid"] }
+utoipa-axum = { version = "0.2.0", default-features = false }
+utoipa-swagger-ui = { version = "9.0.2", default-features = false, features = ["axum", "vendored"] }
+
+[profile.dev.package.sqlx-macros]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

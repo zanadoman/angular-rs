@@ -1,0 +1,32 @@
+name: angular-rs
+
+services:
+  db:
+    image: postgres:18.1-trixie
+    volumes:
+      - db:/var/lib/postgresql
+    ports:
+      - ${DATABASE_PORT}:5432
+    env_file: .env
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  app:
+    build: .
+    volumes:
+      - rustup:/usr/local/rustup
+      - cargo:/usr/local/cargo/registry
+      - target:/app/target
+      - .:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    env_file: .env
+    environment:
+      PUPPETEER_SKIP_DOWNLOAD: true
+    working_dir: /app
+
+volumes:
+  db:
+  rustup:
+  cargo:
+  target:
